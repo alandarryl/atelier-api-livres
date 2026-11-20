@@ -1,0 +1,47 @@
+name: atelier-livres
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: books-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: books_db
+    volumes:
+      - books-mongo-data:/data/db
+    networks:
+      - books-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  books-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: books-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      MONGODB_URI: mongodb://mongodb:27017/books_db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - books-network
+
+volumes:
+  books-mongo-data:
+    name: books-mongo-data
+
+networks:
+  books-network:
+    name: books-network
+    driver: bridge
