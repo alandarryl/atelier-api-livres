@@ -11,3 +11,10 @@
 - pour les aspects dockers, bien nommer et tapper les éléments
 
 
+ROADMAP
+
+- construire le Dockerfile + compose => NE PAS UTILISER LE NODE DE VOTRE MACHINE
+- package.json
+- fixer les version - plus récente LTS : Long Term Support
+- server.js models/books.js routes/books.js
+
