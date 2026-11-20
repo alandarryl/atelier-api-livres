@@ -1,7 +1,5 @@
-name: atelier-livres
-
 services:
-  mongodb:
+  books-mongodb:
     image: mongo:7
     container_name: books-mongodb
     restart: unless-stopped
@@ -30,18 +28,16 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      MONGODB_URI: mongodb://mongodb:27017/books_db
+      MONGO_URI: mongodb://books-mongodb:27017/books_db
     depends_on:
-      mongodb:
+      books-mongodb:
         condition: service_healthy
     networks:
       - books-network
 
 volumes:
   books-mongo-data:
-    name: books-mongo-data
 
 networks:
   books-network:
-    name: books-network
     driver: bridge
